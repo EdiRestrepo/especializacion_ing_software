@@ -35,7 +35,7 @@ Hexagonal architecture aims to decouple the core business logic from external sy
 3. **Infrastructure Layer:** Contains implementations of external systems like databases, web frameworks, etc.
 
 ## Project Structure
-
+´´´ 
 demo
 └── src
 └── main
@@ -53,7 +53,7 @@ demo
 │ │ └── outbound
 │ │ ├── database
 │ │ │ └── entity
-
+´´´ 
 
 ### Domain Layer
 
