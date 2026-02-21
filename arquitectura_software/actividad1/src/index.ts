@@ -1,5 +1,6 @@
 import { Factura } from "./app/patron-isp/antes/Factura";
 import { FacturaElectronica } from "./app/patron-isp/antes/FacturaElectronica";
+import { runAntesDemo } from './app/patron-creator/antes/creatorAntes';
 
 const factura1 = new Factura(123, new Date());
 factura1.idFactura = 123456;
@@ -19,3 +20,6 @@ try {
 }
 facturaElectronica1.imprimir();
 facturaElectronica1.enviarPorEmail();
+
+// Demo del patrón Creator (antes - mal práctica)
+runAntesDemo();

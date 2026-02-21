@@ -1,5 +1,6 @@
 import { FacturaRefactor } from './app/patron-isp/despues-refactor/FacturaRefactor';
 import { FacturaElectronicaRefactor } from './app/patron-isp/despues-refactor/FacturaElectronicaRefactor';
+import { runDespuesDemo } from './app/patron-creator/despues/CreatorDespues';
 
 const factura1 = new FacturaRefactor(123, new Date());
 factura1.idFactura = 123456;
@@ -11,3 +12,6 @@ factura1.imprimir();
 // factura1.enviarPorEmail(); //No se puede enviar por email
 facturaElectronica1.imprimir();
 facturaElectronica1.enviarPorEmail();
+
+// Demo del patrón Creator (después - refactor)
+runDespuesDemo();

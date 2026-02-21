@@ -53,37 +53,51 @@ e insegura.
     - Implementaciones forzadas: métodos que lanzan excepciones o quedan como "no-op".
     - Creación dispersa: lógica de creación distribuida que dificulta saber qué contrato
       ofrece cada objeto.
-  
-## Estructura de la Exposición
-1. Definición breve de los principios (máx. 3 minutos).
-2. Presentación del problema inicial.
-3. Modelo y código que incumplen los principios.
-4. Consecuencias del mal diseño.
-5. Refactorización aplicando los principios.
-6. Comparación antes vs después.
-7. Discusión de trade-offs y costos reales.
 
+  ### Creator (GRASP) — Ejemplo práctico en este repositorio
 
-# Repositorio Git
-Código antes de aplicar los principios.
-Código después de la refactorización.
-Diagramas de clases correspondientes a ambos estados.
-[Model C4](https://medium.com/@javiervivanco/el-modelo-c4-de-documentaci%C3%B3n-para-la-arquitectura-de-software-424704528390)
+  #### Dominio elegido
+  Gestión de un `CarritoCompra` que agrega `Item`s (líneas de pedido) — dominio sencillo y
+  claro para ilustrar responsabilidades de creación.
 
+  #### Descripción del problema inicial
+  En la versión `antes` el `CarritoCompra` crea `Item` directamente (`new Item(...)`) al recibir
+  una petición `addItem(...)`. Esto mezcla la responsabilidad de agregar items con la lógica
+  detallada de construcción de objetos (por ejemplo, valores por defecto, validaciones,
+  subtipos), dificultando cambios y pruebas.
 
+  #### Principios aplicados
+  - GRASP Creator: asignar la responsabilidad de crear objetos al experto en la información
+    necesaria para crear ese objeto. Sin embargo, en el ejemplo "antes" la clase realiza la
+    creación por conveniencia, no por ser el mejor responsable.
+  - Separación de responsabilidades / Dependency Injection: en el `despues` la creación se
+    delega a una fábrica (`ItemFactory`) inyectada, mejorando el acoplamiento y la testabilidad.
+
+  #### Justificación breve de decisiones de diseño
+  - En `antes` la decisión de crear con `new` es simple pero provoca acoplamiento fuerte;
+    cualquier cambio en `Item` obliga cambios en `CarritoCompra`.
+  - En `despues` inyectar una `ItemFactory` permite:
+    - Sustituir la lógica de creación (p. ej. para crear subclases, objetos con invariantes, mocks para tests).
+    - Mantener a `CarritoCompraRefactor` centrada en la agregación y cálculo del total.
+
+  - ¿Quién debe crear a quién y por qué?
+    - Debe crear quien tenga el conocimiento necesario (el "experto en información"). Si la clase necesita detalles internos para construir el objeto, puede tener sentido que cree la instancia. Si la creación depende de políticas, variaciones o es costosa, delegarla a una fábrica o a un builder reduce acoplamiento.
+
+  - ¿Cómo afecta la creación al acoplamiento?
+    - Crear directamente con `new` aumenta el acoplamiento con la implementación concreta. Delegar la creación (por interfaz/factory) cambia la dependencia a una abstracción y facilita cambios, pruebas y extensiones.
+
+  - ¿Factories pueden violar ISP?
+    - Pueden, indirectamente, si las fábricas devuelven objetos con interfaces demasiado amplias o si ocultan capacidades reales del objeto (por ejemplo, una factory que devuelve un objeto que implementa una interfaz con métodos no aplicables). La responsabilidad es diseñar las fábricas y los tipos que producen con interfaces cohesionadas.
+
+  - ¿Qué smells aparecen en estos ejemplos?
+    - Creación rígida: uso de `new` en muchas clases hace difícil cambiar la representación.
+    - Clases con múltiples responsabilidades: la clase que crea y administra luego hace más de lo que debe.
+    - Dificultad para testear: objetos con `new` hardcodeados requieren técnicas como rewire o pruebas de integración.
+    - Interfaces gruesas en objetos producidos por factories pueden ocultar métodos no aplicables.
 
 # Proponer un reto 
-- Código -> que evidencie problemas de diseño y su posterior refactorización.
-- Diagramas de clases antes y después de aplicar los principios.
-  
-- Escenario problematico
-- ¿Por que hay un problema de diseño?
-- IA que nos acerque a un escenario realista, con flujo de codigo, clases, métodos, etc.
 
-- Discusión técnica sobre decisiones, compensaciones y limitaciones.
-- Argumentación estructural frente a preguntas críticas.
-
-
+[Model C4](https://medium.com/@javiervivanco/el-modelo-c4-de-documentaci%C3%B3n-para-la-arquitectura-de-software-424704528390)
 
 # Crear un nuevo proyecto de Node.js con TypeScript.
 
