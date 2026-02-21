@@ -31,8 +31,6 @@ e insegura.
 ### Nivel: Diseño fino de contratos
 
 - Creación responsable y diseño de interfaces cohesionadas.
-  - ¿Quién debe crear a quién y por qué?
-  - ¿Cómo afecta la creación al acoplamiento?
   
   - ¿Cuándo una interfaz está “gorda"?
     - Cuando agrupa responsabilidades no relacionadas y obliga a implementaciones a
