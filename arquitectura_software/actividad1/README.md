@@ -1,6 +1,8 @@
 # Principios de Diseño Aplicados - Creator (GRASP) + ISP (Interface Segregation Principle)
 
-## Entregable README
+
+## ISP (Interface Segregation Principle)
+
 ### Dominio elegido
 Gestión de facturación y documentos financieros (facturas tradicionales y facturación electrónica).
 
