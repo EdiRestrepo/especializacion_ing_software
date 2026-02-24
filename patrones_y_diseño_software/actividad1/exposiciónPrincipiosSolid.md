@@ -41,19 +41,6 @@
 - Extraer los "catálogos" (`$doctors`, `$patients`) a un proveedor/dataset separado para reducir responsabilidades en `AppointmentService`.  
 - Evitar normalizaciones silenciosas en `LegacyAppointmentRepository::save` o documentarlas y exponerlas como comportamiento opcional/convertible.
 
-# Archivos relevantes (referencia)
-- Servicio principal: [`Hospital\Services\AppointmentService`](src/Services/AppointmentService.php) — [src/Services/AppointmentService.php](src/Services/AppointmentService.php)  
-- Controlador: [`Hospital\Controllers\AppointmentController`](src/Controllers/AppointmentController.php) — [src/Controllers/AppointmentController.php](src/Controllers/AppointmentController.php)  
-- Repositorios:  
-  - [`Hospital\Repositories\AppointmentRepository`](src/Repositories/AppointmentRepository.php) — [src/Repositories/AppointmentRepository.php](src/Repositories/AppointmentRepository.php)  
-  - [`Hospital\Repositories\FileAppointmentRepository`](src/Repositories/FileAppointmentRepository.php) — [src/Repositories/FileAppointmentRepository.php](src/Repositories/FileAppointmentRepository.php)  
-  - [`Hospital\Repositories\LegacyAppointmentRepository`](src/Repositories/LegacyAppointmentRepository.php) — [src/Repositories/LegacyAppointmentRepository.php](src/Repositories/LegacyAppointmentRepository.php)  
-- Notificaciones / Logger: [`Hospital\Services\NotificationService`](src/Services/NotificationService.php) — [src/Services/NotificationService.php](src/Services/NotificationService.php); [`Hospital\Infrastructure\Logger`](src/Infrastructure/Logger.php) — [src/Infrastructure/Logger.php](src/Infrastructure/Logger.php)  
-- Punto de composición / arranque: [public/index.php](public/index.php)  
-- Configuración: [config/config.php](config/config.php)  
-- Datos de ejemplo: [storage/appointments.json](storage/appointments.json)
-
-
 
 3. Breve explicación de los Principios SOLID encontrados.
 - **SRP (Single Responsibility Principle)**: Cada módulo o clase debe tener una sola responsabilidad o motivo para cambiar. Si una clase hace varias cosas (p. ej. construir dependencias, manejar persistencia y coordinar notificaciones), es más difícil mantenerla y probarla.
