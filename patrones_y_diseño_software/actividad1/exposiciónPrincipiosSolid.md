@@ -124,4 +124,3 @@ A continuación se listan refactorizaciones posibles, ordenadas por prioridad e 
 
 ---
 
-Archivo generado automáticamente: `docs/Refactorings.md`.
