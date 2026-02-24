@@ -35,11 +35,8 @@
   - Archivos: [`src/Repositories/LegacyAppointmentRepository.php`](src/Repositories/LegacyAppointmentRepository.php) y [`src/Repositories/FileAppointmentRepository.php`](src/Repositories/FileAppointmentRepository.php).  
   - Por qué: diferencias de comportamiento (p. ej. `findById` y `save`) entre implementaciones rompen el contrato esperado por el resto del sistema; esto aumenta la fragilidad y viola expectativas de la interfaz.
 
-# Recomendaciones rápidas
-- Inyectar dependencias en el constructor de [`Hospital\Services\AppointmentService`](src/Services/AppointmentService.php) (recibir un `AppointmentRepository`, `Logger` y `NotificationService`) y mover la selección/creación al punto de composición (`public/index.php` o un contenedor/fábrica). Ver: [public/index.php](public/index.php).  
-- Hacer que todas las implementaciones de repositorio respeten el contrato de la abstracción (`findById` debe devolver `null` si no existe). Archivo referencia: [`src/Repositories/AppointmentRepository.php`](src/Repositories/AppointmentRepository.php).  
-- Extraer los "catálogos" (`$doctors`, `$patients`) a un proveedor/dataset separado para reducir responsabilidades en `AppointmentService`.  
-- Evitar normalizaciones silenciosas en `LegacyAppointmentRepository::save` o documentarlas y exponerlas como comportamiento opcional/convertible.
+
+
 
 
 3. Breve explicación de los Principios SOLID encontrados.
