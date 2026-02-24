@@ -16,7 +16,7 @@ Presentación que incluya para 3 técnicas:
 ## Definición conceptual
   
 ¿Que es un arbol de problemas y objetivos?
-"Técnica que se emplea para identificar una situacion negativa, la cual se intenta solucionar analizando relaciones de tipo causa-efecto". 
+"Técnica que se emplea para identificar una situacion negativa, la cual se intenta solucionar analizando relaciones de tipo causa-efecto y medios-fines". 
 El árbol de problemas describe la realidad actual.
 El árbol de objetivos describe la realidad deseada.
 
