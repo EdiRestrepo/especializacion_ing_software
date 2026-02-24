@@ -35,10 +35,6 @@
   - Archivos: [`src/Repositories/LegacyAppointmentRepository.php`](src/Repositories/LegacyAppointmentRepository.php) y [`src/Repositories/FileAppointmentRepository.php`](src/Repositories/FileAppointmentRepository.php).  
   - Por qué: diferencias de comportamiento (p. ej. `findById` y `save`) entre implementaciones rompen el contrato esperado por el resto del sistema; esto aumenta la fragilidad y viola expectativas de la interfaz.
 
-
-
-
-
 3. Breve explicación de los Principios SOLID encontrados.
 - **SRP (Single Responsibility Principle)**: Cada módulo o clase debe tener una sola responsabilidad o motivo para cambiar. Si una clase hace varias cosas (p. ej. construir dependencias, manejar persistencia y coordinar notificaciones), es más difícil mantenerla y probarla.
 
