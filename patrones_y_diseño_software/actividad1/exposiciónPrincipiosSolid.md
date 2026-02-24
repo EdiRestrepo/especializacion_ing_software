@@ -56,5 +56,92 @@
 
 
 3. Breve explicación de los Principios SOLID encontrados.
+- **SRP (Single Responsibility Principle)**: Cada módulo o clase debe tener una sola responsabilidad o motivo para cambiar. Si una clase hace varias cosas (p. ej. construir dependencias, manejar persistencia y coordinar notificaciones), es más difícil mantenerla y probarla.
+
+- **OCP (Open/Closed Principle)**: Las entidades deben estar abiertas para extensión pero cerradas para modificación. Cuando hay que editar una clase para añadir un nuevo repositorio, la clase no cumple OCP.
+
+- **LSP (Liskov Substitution Principle)**: Las subclases o implementaciones deben poder sustituir a sus supertipos sin alterar el comportamiento esperado. Si una implementación cambia el contrato (p. ej. retorna un objeto en vez de `null`), rompe LSP.
+
+- **ISP (Interface Segregation Principle)**: Las interfaces deben ser específicas y no forzar implementaciones a depender de métodos que no usan. En este código, la interfaz del repositorio es pequeña, pero las diferencias de comportamiento sugieren que podrían necesitarse interfaces más claras o contratos adicionales.
+
+- **DIP (Dependency Inversion Principle)**: Los módulos de alto nivel no deben depender de módulos de bajo nivel; ambos deben depender de abstracciones. Construir dependencias concretas dentro de `AppointmentService` viola DIP y complica pruebas.
+  
 4. Identificación de las consecuencias de las violaciones de principios SOLID.
+
+- **Mantenibilidad reducida**: cambios en una responsabilidad (p. ej. en cómo se envían notificaciones) obligan a modificar múltiples clases; en este repo, AppointmentService mezcla responsabilidades y será costoso cambiar comportamiento sin introducir errores.
+
+- **Difícil de testar**: dependencias construidas internamente (ej. new FileAppointmentRepository, new Logger) impiden inyección de mocks, por lo que las pruebas unitarias son más lentas, frágiles o imposibles.
+
+- **Acoplamiento fuerte**: módulos de alto nivel dependen de implementaciones concretas, lo que impide sustituir o extender componentes sin tocar código existente (viola DIP/OCP). Añadir un nuevo repositorio requerirá editar AppointmentService en vez de sólo extenderlo.
+
+- **Comportamientos inesperados y bugs silenciosos**: violar LSP/contratos (p. ej. LegacyAppointmentRepository::findById que no devuelve null) causa que consumidores asuman invariantes falsas y produzcan fallos lógicos — por ejemplo, una cancelación que no detecta que la cita no existe.
+
+- **Fragmentación del contrato y inconsistencias**: diferencias entre implementaciones de repositorio (normalizaciones, formatos distintos en appointments.json) producen resultados distintos según el backend seleccionado, aumentando la sorpresa para usuarios y desarrolladores.
+
+- **Reutilización limitada**: clases con responsabilidades mezcladas no pueden reutilizarse en otros contextos sin arrastrar dependencias o comportamiento extra (p. ej. llevar NotificationService embebido en AppointmentService).
+
+- **Mayor coste de incorporación**: nuevo personal tardará más en comprender por qué la lógica está dispersa o duplicada entre servicio, repositorios y controladores.
+
+- **Riesgos operativos**: cambios no previstos (normalizaciones silenciosas, validaciones inconsistentes) pueden llevar a pérdida de datos, registros incorrectos o fallas en integraciones externas.
+
 5. Posibles refactorizaciones a realizar en el código.
+
+A continuación se listan refactorizaciones posibles, ordenadas por prioridad e impacto, para mejorar la adherencia a SOLID y la mantenibilidad del proyecto.
+
+## Prioritarias (alto impacto, bajo riesgo)
+
+- **Inyectar dependencias en `AppointmentService`**
+  - Qué: cambiar el constructor para recibir `AppointmentRepository`, `Logger` y `NotificationService` en vez de instanciarlos internamente.
+  - Por qué: corrige DIP y SRP; facilita pruebas unitarias y permite cambiar implementaciones sin editar la clase.
+  - Dónde: `src/Services/AppointmentService.php` y punto de composición `public/index.php`.
+
+- **Arreglar `LegacyAppointmentRepository::findById` para respetar el contrato**
+  - Qué: devolver `null` cuando no exista la entidad y evitar normalizaciones silenciosas en `save`.
+  - Por qué: corrige LSP y evita bugs por expectativas rotas.
+  - Dónde: `src/Repositories/LegacyAppointmentRepository.php`.
+
+## Estructurales (mejoran extensibilidad y pruebas)
+
+- **Extraer una fábrica/contener de composición**
+  - Qué: mover la lógica de creación de componentes (repositorios, logger, notifier) a `public/index.php` o a una clase `AppFactory`/`Container`.
+  - Por qué: mantiene `AppointmentService` cerrado a modificaciones (OCP) y centraliza configuración.
+
+- **Definir interfaces más explícitas**
+  - Qué: añadir interfaces como `LoggerInterface`, `NotificationSenderInterface` y, si procede, `ReadAppointmentRepository`/`WriteAppointmentRepository` si hay métodos diferenciados.
+  - Por qué: mejora ISP y permite múltiples implementaciones intercambiables.
+
+- **Extraer proveedores de datos estáticos**
+  - Qué: mover listas de doctores/pacientes desde `AppointmentService` a un `DataProvider` o archivo de configuración.
+  - Por qué: reduce responsabilidades del servicio y facilita reutilización y pruebas.
+
+## Mejora de calidad (tests, documentación, robustez)
+
+- **Añadir pruebas unitarias y de integración**
+  - Qué: crear tests para `AppointmentService` con repositorios mockeados, y tests que validen comportamiento con `FileAppointmentRepository`.
+  - Por qué: detecta regresiones introducidas por diferencias entre repositorios.
+
+- **Establecer contrato del repositorio y documentarlo**
+  - Qué: documentar explícitamente las precondiciones y postcondiciones de métodos como `findById`, `save`, `listByPatient`.
+  - Por qué: reduce ambigüedad entre implementaciones y facilita cumplimiento de LSP.
+
+- **Normalizar manejo de estados y validaciones**
+  - Qué: centralizar reglas de negocio (p. ej. validación de horarios, estados permitidos) en `AppointmentService` o en clases de validación específicas.
+  - Por qué: evita que repositorios cambien semántica de los objetos.
+
+## Opcionales / a largo plazo
+
+- **Introducir un contenedor de inyección de dependencias ligero** (p.ej. un simple factory o usar una librería pequeña) para composición automática.
+- **Separar responsabilidades del controlador**: mover renderizado HTML a vistas/plantillas y dejar solo coordinación en `AppointmentController`.
+- **Crear adaptadores para formatos legacy**: si `LegacyAppointmentRepository` necesita mantener transformaciones, introducir un adaptador que traduzca entre formatos en vez de cambiar la semántica del repositorio.
+
+## Plan de ejecución sugerido (pasos pequeños)
+
+1. Cambiar `AppointmentService` para aceptar dependencias por constructor y actualizar `public/index.php` para proporcionarlas.
+2. Corregir `LegacyAppointmentRepository::findById` y `save` para respetar contratos.
+3. Extraer proveedores `DoctorsProvider` y `PatientsProvider` y actualizar el servicio.
+4. Añadir `LoggerInterface` y adaptadores si se desea flexibilidad extra.
+5. Añadir tests unitarios para `AppointmentService` y tests de integración para `FileAppointmentRepository`.
+
+---
+
+Archivo generado automáticamente: `docs/Refactorings.md`.
