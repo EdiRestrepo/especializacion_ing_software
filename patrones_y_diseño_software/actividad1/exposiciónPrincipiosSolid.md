@@ -7,12 +7,16 @@
 1. Resumen de los defectos encontrados por el equipo
  
 - La clase `AppointmentController` tiene múltiples responsabilidades, como renderizar vistas, manejar la lógica de negocio y gestionar la persistencia de datos, lo que viola el Single Responsibility Principle (SRP).
+  
 - La clase `AppointmentService` depende directamente de clases concretas como `Doctor` y `Patient`, lo que viola el Dependency Inversion Principle (DIP) al no depender de abstracciones.
+
+
 - La clase Doctor  y Patient podrian ser subclases de una clase Persona, lo que violaría el Liskov Substitution Principle (LSP) si no se implementan correctamente los métodos heredados.
+
 - Las clases `FileAppointmentRepository` y `LegacyAppointmentRepository` tienen implementaciones específicas para la persistencia de datos, lo que dificulta la sustitución de una por otra sin afectar el funcionamiento del sistema, violando el Liskov Substitution Principle (LSP). De hecho en la clase `AppointmentService` se está utilizando directamente la clase `FileAppointmentRepository` y la clase `LegacyAppointmentRepository` en lugar de depender de una interfaz común, lo que también viola el Dependency Inversion Principle (DIP) y el Liskov Substitution Principle (LSP).
 
 
-2. Resumen de los defectos encontrados por la IA.
+1. Resumen de los defectos encontrados por la IA.
 
 - SRP (Single Responsibility Principle) — Violado  
   - Clase implicada: [`Hospital\Services\AppointmentService`](src/Services/AppointmentService.php) ([src/Services/AppointmentService.php](src/Services/AppointmentService.php)).  
@@ -73,17 +77,17 @@ A continuación se listan refactorizaciones posibles, ordenadas por prioridad e 
 - **Inyectar dependencias en `AppointmentService`**
   - Qué: cambiar el constructor para recibir `AppointmentRepository`, `Logger` y `NotificationService` en vez de instanciarlos internamente.
   - Por qué: corrige DIP y SRP; facilita pruebas unitarias y permite cambiar implementaciones sin editar la clase.
-  - Dónde: `src/Services/AppointmentService.php` y punto de composición `public/index.php`.
+  - Dónde: `AppointmentService.php` y punto de composición `index.php`.
 
 - **Arreglar `LegacyAppointmentRepository::findById` para respetar el contrato**
   - Qué: devolver `null` cuando no exista la entidad y evitar normalizaciones silenciosas en `save`.
   - Por qué: corrige LSP y evita bugs por expectativas rotas.
-  - Dónde: `src/Repositories/LegacyAppointmentRepository.php`.
+  - Dónde: `LegacyAppointmentRepository.php`.
 
 ## Estructurales (mejoran extensibilidad y pruebas)
 
 - **Extraer una fábrica/contener de composición**
-  - Qué: mover la lógica de creación de componentes (repositorios, logger, notifier) a `public/index.php` o a una clase `AppFactory`/`Container`.
+  - Qué: mover la lógica de creación de componentes (repositorios, logger, notifier) a `index.php` o a una clase `AppFactory`/`Container`.
   - Por qué: mantiene `AppointmentService` cerrado a modificaciones (OCP) y centraliza configuración.
 
 - **Definir interfaces más explícitas**
