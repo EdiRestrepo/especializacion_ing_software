@@ -2,8 +2,8 @@
 okta:
   oauth2:
     issuer: https://dev-5lxfpxxjzz7ikezw.us.auth0.com/
-    client-id: mCSPOS44Naw016qy7nVnzvtIKWzOGl9g
-    client-secret: dKPQcbSGqAoP7sG86o1gKeFCzVHJQkF98RbaAUQR-vA2RUZ9OoU7r57jxA7tLqVb
+    client-id: kdOUJMobET3Fm3weqJVR1AsgztCnV61W
+    client-secret: GkdC04o6oHvxLLWSwZx9NyMHawL0Fo3wzmsrF7CAJgrKyhBdPIlIJXYsbmkhtw0L
 
 # The sample and instructions above for the callback and logout URL configuration use port 3000.
 # If you wish to use a different port, change this and be sure your callback and logout URLs are
