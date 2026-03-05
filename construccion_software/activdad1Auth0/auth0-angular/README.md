@@ -1,59 +1,51 @@
-# Auth0Angular
+# Autenticación de Auth0 con Angular 
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+1. Selección del lenguaje: Angular  
 
-## Development server
+ 
+2. Implementación del flujo de autenticación: 
 
-To start a local development server, run:
+- Configuración inicial del proyecto.
+`npx skills add auth0/agent-skills --skill auth0-quickstart --skill auth0-angular`
+`npx @angular/cli@latest new auth0-angular --routing=true --style=css` 
+`cd auth0-angular` 
+`npm install @auth0/auth0-angular`  
 
-```bash
-ng serve
-```
+creacion y configuración del archivo environment.ts con las credenciales de Auth0.
+configuracion de las URLs de redirección en el panel de Auth0.
+creacion y configuración del main component para manejar el flujo de autenticación (login, logout, mostrar información del usuario, etc.).
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+creacion de los archivos login.component.ts y logout.component.ts para manejar las acciones de inicio y cierre de sesión respectivamente.
+cracion del archivo profile.component.ts para mostrar la información del usuario autenticado.
 
-## Code scaffolding
+configuracion del archivo app.ts para incluir los componentes y manejar las rutas correspondientes.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+por ultimo ejecutar el proyecto con `ng serve` y verificar el funcionamiento del flujo de autenticación.
 
-```bash
-ng generate component component-name
-```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Integración con Auth0.  
 
-```bash
-ng generate --help
-```
+- Inicio de sesión (Login).  
 
-## Building
+- Cierre de sesión (Logout). 
 
-To build the project run:
+1. Evidencias: PDF
 
-```bash
-ng build
-```
+- Configuración en el panel de Auth0. 
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- Código relevante de la implementación. 
 
-## Running unit tests
+- Funcionamiento correcto del flujo (login exitoso, redirecciones, tokens, etc.). 
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+ 
+4. Documentación de dificultades: 
 
-```bash
-ng test
-```
+- Problemas o errores encontrados durante la implementación. 
 
-## Running end-to-end tests
+- Cómo se solucionaron. 
 
-For end-to-end (e2e) testing, run:
+- Recursos utilizados (documentación oficial, foros, pruebas realizadas, etc.). 
 
-```bash
-ng e2e
-```
+- Aprendizajes obtenidos durante el proceso. 
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
